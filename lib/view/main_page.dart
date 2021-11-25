@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wamo/bloc/wallpaper_bloc.dart';
+import 'package:wamo/view/search_page.dart';
 
 import 'detail_page.dart';
 
@@ -22,6 +23,12 @@ class _MainPageState extends State<MainPage> {
     if (currentScroll == maxScroll) {
       bloc.add(WallpaperEvent());
     }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
@@ -78,17 +85,29 @@ class _MainPageState extends State<MainPage> {
                   ),
                   Align(
                     alignment: Alignment.center,
-                    child: Material(
-                      elevation: 5,
-                      borderRadius: BorderRadius.circular(50),
-                      child: Container(
-                        padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                        width: MediaQuery.of(context).size.width / 1.25,
-                        height: 50,
-                        child: const TextField(
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.search),
-                            border: InputBorder.none,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPage()));
+                      },
+                      child: Hero(
+                        tag: "search",
+                        child: Material(
+                          elevation: 5,
+                          borderRadius: BorderRadius.circular(50),
+                          child: Container(
+                            padding: EdgeInsets.only(left: 20),
+                            width: MediaQuery.of(context).size.width / 1.25,
+                            height: 50,
+                            alignment: Alignment.centerLeft,
+                            child: Row(
+                              children: const [
+                                Icon(Icons.search),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text("Search Wallpaper"),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -185,7 +204,7 @@ class _MainPageState extends State<MainPage> {
                   );
                 }
               },
-            )
+            ),
           ],
         ),
       ),

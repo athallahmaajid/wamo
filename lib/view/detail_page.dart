@@ -34,9 +34,9 @@ class _DetailPageState extends State<DetailPage> {
                     Navigator.pop(context);
                   },
                   child: Container(
-                    padding: const EdgeInsets.fromLTRB(10, 3, 0, 3),
+                    padding: const EdgeInsets.fromLTRB(0, 5, 7, 5),
                     child: const Icon(
-                      Icons.arrow_back_ios,
+                      Icons.arrow_back_ios_new,
                       color: Colors.white,
                       size: 32,
                     ),
@@ -47,7 +47,7 @@ class _DetailPageState extends State<DetailPage> {
                   ),
                 ),
               ),
-              Dialog(),
+              dialog(),
             ],
           ),
           Expanded(
@@ -63,19 +63,16 @@ class _DetailPageState extends State<DetailPage> {
                         res = data;
                         downloading = true;
                       });
-                      print("DataReceived: " + data);
                     }, onDone: () async {
                       lock = await Wallpaper.homeScreen();
                       setState(() {
                         downloading = false;
                         lock = lock;
                       });
-                      print("Task Done");
                     }, onError: (error) {
                       setState(() {
                         downloading = false;
                       });
-                      print("Some Error");
                     });
                   },
                   child: Column(
@@ -109,24 +106,26 @@ class _DetailPageState extends State<DetailPage> {
     );
   }
 
-  Widget Dialog() {
+  Widget dialog() {
     return Positioned(
       top: 200,
       left: 70,
       child: downloading
-          ? Container(
+          ? SizedBox(
               height: 120.0,
               width: 200.0,
               child: Card(
-                color: Colors.black,
+                color: Theme.of(context).backgroundColor,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    CircularProgressIndicator(),
+                    LinearProgressIndicator(
+                      value: double.parse(res!),
+                    ),
                     SizedBox(height: 20.0),
                     Text(
                       "Downloading File : $res",
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color),
                     )
                   ],
                 ),
