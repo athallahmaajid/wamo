@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wamo/bloc/wallpaper_bloc.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'view/main_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await FlutterDownloader.initialize(debug: true // optional: set false to disable printing logs to console
+      );
   runApp(const MyApp());
 }
 
