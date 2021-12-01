@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:wamo/bloc/wallpaper_bloc.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'model/wallpaper.dart';
 import 'view/main_page.dart';
 
 void main() async {
+  await Hive.initFlutter();
+  WidgetsFlutterBinding.ensureInitialized();
+  Hive.registerAdapter(WallpaperImageAdapter());
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterDownloader.initialize(debug: true // optional: set false to disable printing logs to console
       );

@@ -1,7 +1,11 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:hive/hive.dart';
+part 'wallpaper.g.dart';
 
+@HiveType(typeId: 1)
 class WallpaperImage {
+  @HiveField(0)
   String url;
   WallpaperImage(this.url);
 
