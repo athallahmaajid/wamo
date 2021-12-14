@@ -34,7 +34,8 @@ class MyApp extends StatelessWidget {
         ),
       ),
       darkTheme: ThemeData(
-        backgroundColor: const Color(0xFF1e1e1e),
+        backgroundColor: const Color(0xFF202124),
+        cardColor: const Color(0xFF303134),
         textTheme: const TextTheme(
           bodyText1: TextStyle(color: Colors.white),
         ),

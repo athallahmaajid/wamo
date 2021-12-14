@@ -173,8 +173,9 @@ class _DetailPageState extends State<DetailPage> {
                           Icons.favorite,
                           color: Colors.pink,
                         )
-                      : const Icon(
+                      : Icon(
                           Icons.favorite_border_outlined,
+                          color: Theme.of(context).textTheme.bodyText1!.color,
                         ),
                 ),
               ],

@@ -35,6 +35,7 @@ class _SearchPageState extends State<SearchPage> {
         return bloc;
       },
       child: Scaffold(
+        backgroundColor: Theme.of(context).backgroundColor,
         body: SingleChildScrollView(
           controller: scrollController,
           child: SafeArea(
@@ -59,23 +60,27 @@ class _SearchPageState extends State<SearchPage> {
                         child: Material(
                           elevation: 3,
                           borderRadius: BorderRadius.circular(50),
+                          color: Theme.of(context).cardColor,
                           child: Container(
                             padding: EdgeInsets.fromLTRB(5, 3, 5, 0),
                             width: MediaQuery.of(context).size.width / 1.25,
                             height: 50,
                             child: TextField(
+                              style: Theme.of(context).textTheme.bodyText1,
                               autofocus: true,
                               controller: searchQuery,
                               textInputAction: TextInputAction.search,
+                              cursorColor: Theme.of(context).textTheme.bodyText1!.color,
                               onSubmitted: (value) {
                                 isPressed = true;
                                 bloc.add(ResetEvent());
                                 bloc.add(WallpaperSearchEvent(query: searchQuery.text));
                               },
-                              decoration: const InputDecoration(
-                                prefixIcon: Icon(Icons.search),
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(Icons.search, color: Colors.blue),
                                 border: InputBorder.none,
                                 hintText: "Search Wallpaper",
+                                hintStyle: Theme.of(context).textTheme.bodyText1,
                               ),
                             ),
                           ),

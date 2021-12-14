@@ -121,25 +121,26 @@ class _MainPageState extends State<MainPage> {
                         alignment: Alignment.center,
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPage()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => const SearchPage()));
                           },
                           child: Hero(
                             tag: "search",
                             child: Material(
                               elevation: 5,
                               borderRadius: BorderRadius.circular(50),
+                              color: Theme.of(context).cardColor,
                               child: Container(
-                                padding: EdgeInsets.only(left: 20),
+                                padding: const EdgeInsets.only(left: 20),
                                 width: MediaQuery.of(context).size.width / 1.25,
                                 height: 50,
                                 alignment: Alignment.centerLeft,
                                 child: Row(
-                                  children: const [
-                                    Icon(Icons.search),
-                                    SizedBox(
+                                  children: [
+                                    Icon(Icons.search, color: Theme.of(context).textTheme.bodyText1!.color),
+                                    const SizedBox(
                                       width: 10,
                                     ),
-                                    Text("Search Wallpaper"),
+                                    Text("Search Wallpaper", style: Theme.of(context).textTheme.bodyText1),
                                   ],
                                 ),
                               ),
@@ -254,92 +255,89 @@ class _MainPageState extends State<MainPage> {
                   );
                 } else {
                   var wallpaperBox = Hive.box("wallpaperimages");
-                  return ValueListenableBuilder(
-                    valueListenable: wallpaperBox.listenable(),
-                    builder: (context, Box wallpapers, _) => ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) {
-                        WallpaperImage wallpaperImage = wallpaperBox.getAt(index);
-                        if (index % 2 == 0) {
-                          return Container();
-                        }
-                        return Column(
-                          children: [
-                            if (index != 0)
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => DetailPage(url: wallpaperImage.url, tag: index.toString()),
-                                          ),
-                                        );
-                                      },
-                                      child: Hero(
-                                        tag: (index).toString(),
-                                        child: Container(
-                                            height: 300,
-                                            width: 160,
-                                            decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                image: NetworkImage(wallpaperImage.url),
-                                                fit: BoxFit.fill,
-                                              ),
-                                              borderRadius: BorderRadius.circular(10),
-                                            ),
-                                            margin: const EdgeInsets.fromLTRB(10, 5, 10, 5)),
+                  if (wallpaperBox.isEmpty) {
+                    return Center(
+                      child: Text(
+                        "You haven't liked anything :(",
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
+                    );
+                  } else {
+                    return ValueListenableBuilder(
+                      valueListenable: wallpaperBox.listenable(),
+                      builder: (context, Box wallpapers, _) => ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          WallpaperImage wallpaperImage = wallpaperBox.getAt(index);
+                          if ((index + 1) % 2 == 0) {
+                            return Container();
+                          }
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => DetailPage(url: wallpaperImage.url, tag: index.toString()),
                                       ),
-                                    ),
-                                  ),
-                                  (index != wallpaperBox.length - 1)
-                                      ? Align(
-                                          alignment: Alignment.centerRight,
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      DetailPage(url: wallpaperBox.getAt(index + 1).url, tag: (index + 1).toString()),
-                                                ),
-                                              );
-                                            },
-                                            child: Hero(
-                                              tag: (index + 1).toString(),
-                                              child: Container(
-                                                  height: 300,
-                                                  width: 160,
-                                                  decoration: BoxDecoration(
-                                                    image: DecorationImage(
-                                                      image: NetworkImage(wallpaperBox.getAt(index + 1).url),
-                                                      fit: BoxFit.fill,
-                                                    ),
-                                                    borderRadius: BorderRadius.circular(10),
-                                                  ),
-                                                  margin: const EdgeInsets.fromLTRB(10, 5, 10, 5)),
-                                            ),
+                                    );
+                                  },
+                                  child: Hero(
+                                    tag: (index).toString(),
+                                    child: Container(
+                                        height: 300,
+                                        width: 160,
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image: NetworkImage(wallpaperImage.url),
+                                            fit: BoxFit.fill,
                                           ),
-                                        )
-                                      : Container(),
-                                ],
-                              )
-                            else
-                              const SizedBox(
-                                width: 30,
-                                height: 30,
-                                child: CircularProgressIndicator.adaptive(),
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        margin: const EdgeInsets.fromLTRB(10, 5, 10, 5)),
+                                  ),
+                                ),
                               ),
-                          ],
-                        );
-                      },
-                    ),
-                  );
+                              (index != wallpaperBox.length - 1)
+                                  ? Align(
+                                      alignment: Alignment.centerRight,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => DetailPage(url: wallpaperBox.getAt(index + 1).url, tag: (index + 1).toString()),
+                                            ),
+                                          );
+                                        },
+                                        child: Hero(
+                                          tag: (index + 1).toString(),
+                                          child: Container(
+                                              height: 300,
+                                              width: 160,
+                                              decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                  image: NetworkImage(wallpaperBox.getAt(index + 1).url),
+                                                  fit: BoxFit.fill,
+                                                ),
+                                                borderRadius: BorderRadius.circular(10),
+                                              ),
+                                              margin: const EdgeInsets.fromLTRB(10, 5, 10, 5)),
+                                        ),
+                                      ),
+                                    )
+                                  : Container(),
+                            ],
+                          );
+                        },
+                      ),
+                    );
+                  }
                 }
               } else {
                 return const Center(
