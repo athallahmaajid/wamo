@@ -125,12 +125,17 @@ class _SearchPageState extends State<SearchPage> {
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                builder: (context) => DetailPage(url: wallpaperLoaded.wallpapers![index].url, tag: index.toString()),
+                                                builder: (context) => DetailPage(
+                                                  url: wallpaperLoaded.wallpapers![index].url,
+                                                  tag: index.toString(),
+                                                  source: "Wallpaper Abyss",
+                                                ),
                                               ),
                                             );
                                           },
                                           child: Hero(
                                             tag: (index).toString(),
+                                            // child: Image.network(wallpaperLoaded.wallpapers![index].url)
                                             child: Container(
                                                 height: 300,
                                                 width: 160,
@@ -149,8 +154,11 @@ class _SearchPageState extends State<SearchPage> {
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                builder: (context) =>
-                                                    DetailPage(url: wallpaperLoaded.wallpapers![index + 1].url, tag: (index + 1).toString()),
+                                                builder: (context) => DetailPage(
+                                                  url: wallpaperLoaded.wallpapers![index + 1].url,
+                                                  tag: (index + 1).toString(),
+                                                  source: "Wallpaper Abyss",
+                                                ),
                                               ),
                                             );
                                           },

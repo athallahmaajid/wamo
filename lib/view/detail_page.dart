@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -14,8 +13,9 @@ import 'package:wamo/model/wallpaper.dart';
 class DetailPage extends StatefulWidget {
   final String url;
   final String tag;
+  String source;
 
-  DetailPage({Key? key, required this.url, required this.tag}) : super(key: key);
+  DetailPage({Key? key, required this.url, required this.tag, this.source = ""}) : super(key: key);
 
   @override
   State<DetailPage> createState() => _DetailPageState();
@@ -73,7 +73,19 @@ class _DetailPageState extends State<DetailPage> {
         children: [
           Stack(
             children: [
-              Hero(tag: widget.tag, child: Image.network(widget.url)),
+              Hero(
+                tag: widget.tag,
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.9,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage(widget.url),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
               Positioned(
                 top: MediaQuery.of(context).size.height * 0.07,
                 left: MediaQuery.of(context).size.width * 0.06,
@@ -95,6 +107,16 @@ class _DetailPageState extends State<DetailPage> {
                   ),
                 ),
               ),
+              (widget.source != "")
+                  ? Positioned(
+                      bottom: 10,
+                      right: 10,
+                      child: Text(
+                        "Powered By ${widget.source}",
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
+                    )
+                  : Container(),
               dialog(),
             ],
           ),
@@ -134,6 +156,7 @@ class _DetailPageState extends State<DetailPage> {
                     var status = await Permission.storage.request();
                     if (status.isGranted) {
                       String fileName = widget.url.replaceAll("https://images.wallpaperscraft.com/image/single/", "");
+                      // ignore: unused_local_variable
                       final taskId = await FlutterDownloader.enqueue(
                         fileName: fileName,
                         url: widget.url,
