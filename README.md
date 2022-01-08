@@ -1,16 +1,22 @@
-# wamo
+# Wamo
 
-A new Flutter project.
+### Collections of mobile wallpapers go to your phone!
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+<div align="center">
+  <img width="400" height="500" src="https://github.com/athallahmaajid/wamo/blob/master/assets/wamo.png">
+</div>
 
-A few resources to get you started if this is your first Flutter project:
+## How to Install
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+### Install from releases
+  1. Download from releases
+  2. Open it and install
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Build it yourself
+1. Make sure you have flutter SDK installed on your computer
+2. Clone this project
+3. `flutter pub get`
+  * Android: `flutter build apk --release`
+  * iOS: `flutter build ipa --release`
+4. get the app
