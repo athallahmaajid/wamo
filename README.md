@@ -17,6 +17,7 @@
 1. Make sure you have flutter SDK installed on your computer
 2. Clone this project
 3. `flutter pub get`
+4. Compile It
   * Android: `flutter build apk --release`
   * iOS: `flutter build ipa --release`
-4. get the app
+5. get the app
