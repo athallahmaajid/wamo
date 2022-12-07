@@ -182,7 +182,8 @@ class _MainPageState extends State<MainPage> {
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                builder: (context) => DetailPage(url: wallpaperLoaded.wallpapers![index].url, tag: index.toString()),
+                                                builder: (context) => DetailPage(
+                                                    url: wallpaperLoaded.wallpapers![index].url, tag: index.toString(), source: "Wallpaper Crafts"),
                                               ),
                                             );
                                           },
@@ -207,8 +208,10 @@ class _MainPageState extends State<MainPage> {
                                                   Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          DetailPage(url: wallpaperLoaded.wallpapers![index + 1].url, tag: (index + 1).toString()),
+                                                      builder: (context) => DetailPage(
+                                                          url: wallpaperLoaded.wallpapers![index + 1].url,
+                                                          tag: (index + 1).toString(),
+                                                          source: "Wallpaper Crafts"),
                                                     ),
                                                   );
                                                 },

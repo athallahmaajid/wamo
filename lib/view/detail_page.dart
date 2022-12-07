@@ -15,7 +15,8 @@ class DetailPage extends StatefulWidget {
   final String tag;
   String source;
 
-  DetailPage({Key? key, required this.url, required this.tag, this.source = ""}) : super(key: key);
+  DetailPage({Key? key, required this.url, required this.tag, this.source = ""})
+      : super(key: key);
 
   @override
   State<DetailPage> createState() => _DetailPageState();
@@ -26,7 +27,10 @@ class _DetailPageState extends State<DetailPage> {
   Stream<String>? progressString;
   String? res;
   bool downloading = false;
-  String home = "Home Screen", lock = "Lock Screen", both = "Both Screen", system = "System";
+  String home = "Home Screen",
+      lock = "Lock Screen",
+      both = "Both Screen",
+      system = "System";
 
   final ReceivePort _port = ReceivePort();
 
@@ -40,7 +44,8 @@ class _DetailPageState extends State<DetailPage> {
       isFavorite = true;
     }
 
-    IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port');
+    IsolateNameServer.registerPortWithName(
+        _port.sendPort, 'downloader_send_port');
     _port.listen((dynamic data) {
       // ignore: unused_local_variable
       String id = data[0];
@@ -60,8 +65,10 @@ class _DetailPageState extends State<DetailPage> {
     super.dispose();
   }
 
-  static void downloadCallback(String id, DownloadTaskStatus status, int progress) {
-    final SendPort? send = IsolateNameServer.lookupPortByName('downloader_send_port');
+  static void downloadCallback(
+      String id, DownloadTaskStatus status, int progress) {
+    final SendPort? send =
+        IsolateNameServer.lookupPortByName('downloader_send_port');
     send!.send([id, status, progress]);
   }
 
@@ -107,100 +114,119 @@ class _DetailPageState extends State<DetailPage> {
                   ),
                 ),
               ),
-              (widget.source != "")
-                  ? Positioned(
-                      bottom: 10,
-                      right: 10,
-                      child: Text(
-                        "Powered By ${widget.source}",
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                    )
-                  : Container(),
               dialog(),
             ],
           ),
           Expanded(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            child: Stack(
               children: [
-                GestureDetector(
-                  onTap: () {
-                    progressString = Wallpaper.ImageDownloadProgress(widget.url);
-                    progressString!.listen((data) {
-                      setState(() {
-                        res = data;
-                        downloading = true;
-                      });
-                    }, onDone: () async {
-                      lock = await Wallpaper.homeScreen();
-                      setState(() {
-                        downloading = false;
-                        lock = lock;
-                      });
-                    }, onError: (error) {
-                      setState(() {
-                        downloading = false;
-                      });
-                    });
-                  },
-                  child: Icon(
-                    Icons.wallpaper_outlined,
-                    size: 32,
-                    color: Theme.of(context).textTheme.bodyText1!.color,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () async {
-                    var status = await Permission.storage.request();
-                    if (status.isGranted) {
-                      String fileName = widget.url.replaceAll("https://images.wallpaperscraft.com/image/single/", "");
-                      // ignore: unused_local_variable
-                      final taskId = await FlutterDownloader.enqueue(
-                        fileName: fileName,
-                        url: widget.url,
-                        savedDir: '/storage/emulated/0/Download/',
-                        showNotification: true, // show download progress in status bar (for Android)
-                        openFileFromNotification: true, // click on notification to open downloaded file (for Android)
-                      );
-                    } else {
-                      showDialog(
-                        context: context,
-                        builder: (_) => const Dialog(
-                          child: Text("Please grant the permission"),
-                        ),
-                      );
-                    }
-                  },
-                  child: Icon(
-                    Icons.download,
-                    size: 32,
-                    color: Theme.of(context).textTheme.bodyText1!.color,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      isFavorite = !isFavorite;
-                    });
-                    var wallpaperBox = Hive.box("wallpaperimages");
-                    if (isFavorite) {
-                      wallpaperBox.put(widget.url, WallpaperImage(widget.url));
-                    } else {
-                      wallpaperBox.delete(widget.url);
-                    }
-                  },
-                  child: (isFavorite)
-                      ? const Icon(
-                          Icons.favorite,
-                          color: Colors.pink,
-                        )
-                      : Icon(
-                          Icons.favorite_border_outlined,
+                Align(
+                  alignment: Alignment.center,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          progressString =
+                              Wallpaper.imageDownloadProgress(widget.url);
+                          progressString!.listen((data) {
+                            setState(() {
+                              res = data;
+                              downloading = true;
+                            });
+                          }, onDone: () async {
+                            lock = await Wallpaper.homeScreen();
+                            setState(() {
+                              downloading = false;
+                              lock = lock;
+                            });
+                          }, onError: (error) {
+                            setState(() {
+                              downloading = false;
+                            });
+                          });
+                        },
+                        child: Icon(
+                          Icons.wallpaper_outlined,
+                          size: 32,
                           color: Theme.of(context).textTheme.bodyText1!.color,
                         ),
+                      ),
+                      GestureDetector(
+                        onTap: () async {
+                          var status = await Permission.storage.request();
+                          if (status.isGranted) {
+                            String fileName = widget.url.replaceAll(
+                                "https://images.wallpaperscraft.com/image/single/",
+                                "");
+                            // ignore: unused_local_variable
+                            final taskId = await FlutterDownloader.enqueue(
+                              fileName: fileName,
+                              url: widget.url,
+                              savedDir: '/storage/emulated/0/Download/',
+                              showNotification:
+                                  true, // show download progress in status bar (for Android)
+                              openFileFromNotification:
+                                  true, // click on notification to open downloaded file (for Android)
+                            );
+                          } else {
+                            showDialog(
+                              context: context,
+                              builder: (_) => const Dialog(
+                                child: Text("Please grant the permission"),
+                              ),
+                            );
+                          }
+                        },
+                        child: Icon(
+                          Icons.download,
+                          size: 32,
+                          color: Theme.of(context).textTheme.bodyText1!.color,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isFavorite = !isFavorite;
+                          });
+                          var wallpaperBox = Hive.box("wallpaperimages");
+                          if (isFavorite) {
+                            wallpaperBox.put(
+                                widget.url, WallpaperImage(widget.url));
+                          } else {
+                            wallpaperBox.delete(widget.url);
+                          }
+                        },
+                        child: (isFavorite)
+                            ? const Icon(
+                                Icons.favorite,
+                                color: Colors.pink,
+                              )
+                            : Icon(
+                                Icons.favorite_border_outlined,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color,
+                              ),
+                      ),
+                    ],
+                  ),
                 ),
+                (widget.source != "")
+                    ? Positioned(
+                        top: 3,
+                        right: 5,
+                        child: Text(
+                          "Powered By ${widget.source}",
+                          style: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodyText1!.color,
+                              fontSize: 12),
+                        ),
+                      )
+                    : Container(),
               ],
             ),
           )
@@ -230,7 +256,9 @@ class _DetailPageState extends State<DetailPage> {
                       SizedBox(height: 20.0),
                       Text(
                         "Downloading File : $res",
-                        style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color),
+                        style: TextStyle(
+                            color:
+                                Theme.of(context).textTheme.bodyText1!.color),
                       )
                     ],
                   ),
